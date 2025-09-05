@@ -8,7 +8,7 @@
         Title="GitLabTool" Height="230" Width="450"
         Topmost="True"
         Background="#222222"
-        Loaded="MainWindow_OnLoaded" Icon="/Icons/Gitlab.png">
+        Loaded="MainWindow_OnLoaded" Icon="pack://application:,,,/GitLabTool.App;component/Icons/Gitlab.png">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="32"
                       CornerRadius="6"
@@ -26,7 +26,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Border BorderThickness="1" BorderBrush="#555555" CornerRadius="4">
+    <Border x:Name="PanelBorder" x:FieldModifier="private" BorderThickness="2" BorderBrush="#555555" CornerRadius="4">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -41,7 +41,8 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Image x:Name="AppIconImage" x:FieldModifier="private" Grid.Column="0" Source="pack://application:,,,/GitLabTool.App;component/Icons/Gitlab.png" Width="24" Height="24" Margin="6" />
+                <Border x:Name="IconBackgroundBorder" x:FieldModifier="private" Grid.Column="0" Background="DarkOliveGreen" Opacity="1" CornerRadius="4" Visibility="Hidden" />
+                <Image x:Name="AppIconImage" x:FieldModifier="private" Grid.Column="0" Source="pack://application:,,,/GitLabTool.App;component/Icons/Gitlab.png" Width="16" Height="16" Margin="6" />
                 <TextBlock x:Name="TitleTextBlock" x:FieldModifier="private" Grid.Column="1" Text="GitLabTool" VerticalAlignment="Center" Margin="5,0"  />
                 <Button x:Name="MinimizeButton" x:FieldModifier="private" Grid.Column="2" Width="32" Height="32" Margin="2" 
                         WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource MinimizeButtonStyle}" 

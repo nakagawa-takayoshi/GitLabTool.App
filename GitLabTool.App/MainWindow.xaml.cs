@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace GitLabTool.App;
 
@@ -33,8 +34,7 @@ public partial class MainWindow : Window
 
     private void MinimizeWindow()
     {
-        AppIconImage.Visibility = Visibility.Collapsed;
-        TitleTextBlock.Visibility = Visibility.Visible;
+        IconBackgroundBorder.Visibility = Visibility.Visible;
         CloseButton.Visibility = Visibility.Collapsed;
         MinimizeButton.Visibility = Visibility.Collapsed;
         RestoreButton.Visibility = Visibility.Visible;
@@ -46,12 +46,12 @@ public partial class MainWindow : Window
         Top = 0;
         Width = 32.0d;
         Height = 32.0d;
+        PanelBorder.BorderBrush = Brushes.Olive;
     }
 
     private void RestoreButton_OnClick(object sender, RoutedEventArgs e)
     {
-        AppIconImage.Visibility = Visibility.Visible;
-        TitleTextBlock.Visibility = Visibility.Visible;
+        IconBackgroundBorder.Visibility = Visibility.Hidden;
         CloseButton.Visibility = Visibility.Visible;
         MinimizeButton.Visibility = Visibility.Visible;
         RestoreButton.Visibility = Visibility.Collapsed;
@@ -59,6 +59,7 @@ public partial class MainWindow : Window
         Top = _windowRect.Y;
         Width = _windowRect.Width;
         Height = _windowRect.Height;
+        PanelBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(0x55,0x55,0x55));
     }
 
     private void CopyButton_OnClick(object sender, RoutedEventArgs e)
@@ -86,6 +87,7 @@ public partial class MainWindow : Window
         KeywordComboBox.SelectedIndex = 0;
 
         BranchNamePrefixTextBlock.Text = $"user/nakagawa/{DateTime.Now.ToString("yyyyMMdd")}_A231_";
+        MinimizeWindow();
     }
 
     private void KeywordComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
