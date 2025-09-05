@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -59,7 +60,7 @@ public partial class MainWindow : Window
         Top = _windowRect.Y;
         Width = _windowRect.Width;
         Height = _windowRect.Height;
-        PanelBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(0x55,0x55,0x55));
+        PanelBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(0x55, 0x55, 0x55));
     }
 
     private void CopyButton_OnClick(object sender, RoutedEventArgs e)
@@ -86,7 +87,7 @@ public partial class MainWindow : Window
         Top = 0;
         KeywordComboBox.SelectedIndex = 0;
 
-        BranchNamePrefixTextBlock.Text = $"user/nakagawa/{DateTime.Now.ToString("yyyyMMdd")}_A231_";
+        BranchNamePrefixTextBlock.Text = $"user/nakagawa/{DateTime.Now.ToString("yyyyMMdd")}_";
         MinimizeWindow();
     }
 
@@ -131,5 +132,14 @@ public partial class MainWindow : Window
         if (FixTextComboBox.SelectedItem is not ComboBoxItem selectedValue) return;
 
         CommitMessageTextBox.Text = selectedValue.Content.ToString() ?? string.Empty;
+    }
+
+    private void PastButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        string url = Clipboard.GetText();
+        var match = Regex.Match(url, @"https?://[a-zA-Z0-9.-]+\.atlassian\.net/browse/([^/?#]+)");
+        if (!match.Success) return;
+
+        BranchNameTextBox.Text = match.Groups[1].Value;
     }
 }

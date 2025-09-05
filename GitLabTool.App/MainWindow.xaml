@@ -101,6 +101,7 @@
             </TabControl>
             <DockPanel Grid.Row="2" Grid.Column="0"  Background="#111111" HorizontalAlignment="Stretch" >
                 <Button DockPanel.Dock="Right" Width="120" Height="32" Content="コピー" Margin="5" HorizontalAlignment="Right" Background="DodgerBlue" Click="CopyButton_OnClick" />
+                <Button DockPanel.Dock="Right" Width="120" Height="32" Content="ペースト" Margin="5" HorizontalAlignment="Right" Click="PastButton_OnClick"  />
             </DockPanel>
         </Grid>
     </Border>
