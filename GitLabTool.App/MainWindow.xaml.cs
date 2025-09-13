@@ -39,10 +39,6 @@ public partial class MainWindow : Window
         CloseButton.Visibility = Visibility.Collapsed;
         MinimizeButton.Visibility = Visibility.Collapsed;
         RestoreButton.Visibility = Visibility.Visible;
-        _windowRect.X = Left;
-        _windowRect.Y = Top;
-        _windowRect.Width = ActualWidth;
-        _windowRect.Height = ActualHeight;
         Left = SystemParameters.PrimaryScreenWidth - ActualWidth;
         Top = 0;
         Width = 32.0d;
@@ -85,6 +81,10 @@ public partial class MainWindow : Window
     {
         Left = SystemParameters.PrimaryScreenWidth - ActualWidth;
         Top = 0;
+        _windowRect.X = Left;
+        _windowRect.Y = Top;
+        _windowRect.Width = ActualWidth;
+        _windowRect.Height = ActualHeight;
         KeywordComboBox.SelectedIndex = 0;
 
         BranchNamePrefixTextBlock.Text = $"user/nakagawa/{DateTime.Now.ToString("yyyyMMdd")}_";
@@ -136,10 +136,26 @@ public partial class MainWindow : Window
 
     private void PastButton_OnClick(object sender, RoutedEventArgs e)
     {
-        string url = Clipboard.GetText();
-        var match = Regex.Match(url, @"https?://[a-zA-Z0-9.-]+\.atlassian\.net/browse/([^/?#]+)");
+        if (GitTabControl.SelectedIndex == 0)
+        {
+            if (KeywordComboBox.SelectedItem is not ComboBoxItem selectedValue) return;
+
+            Clipboard.SetText($"{selectedValue.Content}: {Clipboard.GetText()}");
+            CommitMessageTextBox.Text = string.Empty;
+            FixTextComboBox.SelectedIndex = -1;
+            MinimizeWindow();
+            return;
+        }
+
+        Match match = Regex.Match(Clipboard.GetText(), @"https?://[a-zA-Z0-9.-]+\.atlassian\.net/browse/([^/?#]+)");
         if (!match.Success) return;
 
         BranchNameTextBox.Text = match.Groups[1].Value;
+        Clipboard.SetText($"{BranchNamePrefixTextBlock.Text}{BranchNameTextBox.Text}");
+    }
+
+    private void MainWindow_OnDeactivated(object? sender, EventArgs e)
+    {
+        MinimizeWindow();
     }
 }

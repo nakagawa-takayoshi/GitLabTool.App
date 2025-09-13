@@ -8,7 +8,9 @@
         Title="GitLabTool" Height="230" Width="450"
         Topmost="True"
         Background="#222222"
-        Loaded="MainWindow_OnLoaded" Icon="pack://application:,,,/GitLabTool.App;component/Icons/Gitlab.png">
+        Loaded="MainWindow_OnLoaded"
+        Deactivated="MainWindow_OnDeactivated"
+        Icon="pack://application:,,,/GitLabTool.App;component/Icons/Gitlab.png">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="32"
                       CornerRadius="6"
