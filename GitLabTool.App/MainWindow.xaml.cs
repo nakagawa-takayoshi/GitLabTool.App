@@ -16,6 +16,11 @@ public partial class MainWindow : Window
     private Rect _windowRect = new Rect(0, 0, 0, 0);
 
     /// <summary>
+    /// 最小化されているかどうか
+    /// </summary>
+    private bool minimized;
+
+    /// <summary>
     /// コンストラクタ
     /// </summary>
     public MainWindow()
@@ -35,6 +40,8 @@ public partial class MainWindow : Window
 
     private void MinimizeWindow()
     {
+        if (minimized) return;
+
         IconBackgroundBorder.Visibility = Visibility.Visible;
         CloseButton.Visibility = Visibility.Collapsed;
         MinimizeButton.Visibility = Visibility.Collapsed;
@@ -44,6 +51,7 @@ public partial class MainWindow : Window
         Width = 32.0d;
         Height = 32.0d;
         PanelBorder.BorderBrush = Brushes.Olive;
+        minimized = true;
     }
 
     private void RestoreButton_OnClick(object sender, RoutedEventArgs e)
@@ -57,6 +65,7 @@ public partial class MainWindow : Window
         Width = _windowRect.Width;
         Height = _windowRect.Height;
         PanelBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(0x55, 0x55, 0x55));
+        minimized = false;
     }
 
     private void CopyButton_OnClick(object sender, RoutedEventArgs e)
