@@ -18,7 +18,7 @@ public partial class MainWindow : Window
     /// <summary>
     /// 最小化されているかどうか
     /// </summary>
-    private bool minimized;
+    private bool _minimized;
 
     /// <summary>
     /// コンストラクタ
@@ -40,7 +40,7 @@ public partial class MainWindow : Window
 
     private void MinimizeWindow()
     {
-        if (minimized) return;
+        if (_minimized) return;
 
         IconBackgroundBorder.Visibility = Visibility.Visible;
         CloseButton.Visibility = Visibility.Collapsed;
@@ -51,7 +51,7 @@ public partial class MainWindow : Window
         Width = 32.0d;
         Height = 32.0d;
         PanelBorder.BorderBrush = Brushes.Olive;
-        minimized = true;
+        _minimized = true;
     }
 
     private void RestoreButton_OnClick(object sender, RoutedEventArgs e)
@@ -65,7 +65,7 @@ public partial class MainWindow : Window
         Width = _windowRect.Width;
         Height = _windowRect.Height;
         PanelBorder.BorderBrush = new SolidColorBrush(Color.FromRgb(0x55, 0x55, 0x55));
-        minimized = false;
+        _minimized = false;
     }
 
     private void CopyButton_OnClick(object sender, RoutedEventArgs e)
@@ -149,6 +149,8 @@ public partial class MainWindow : Window
         {
             if (KeywordComboBox.SelectedItem is not ComboBoxItem selectedValue) return;
 
+            CommitMessageTextBox.Text = Clipboard.GetText();
+            Dispatcher.Invoke(UpdateLayout);
             Clipboard.SetText($"{selectedValue.Content}: {Clipboard.GetText()}");
             CommitMessageTextBox.Text = string.Empty;
             FixTextComboBox.SelectedIndex = -1;
