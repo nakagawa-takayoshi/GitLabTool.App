@@ -27,6 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="R3" Version="1.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Icons\Close_n.png" />
     <Resource Include="Icons\Minimize_n.png" />
     <Resource Include="Icons\Restore_n.png" />
