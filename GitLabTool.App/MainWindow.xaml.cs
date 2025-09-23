@@ -1,7 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using System.Windows.Threading;
+using R3;
 
 namespace GitLabTool.App;
 
@@ -68,22 +71,25 @@ public partial class MainWindow : Window
         minimized = false;
     }
 
+
     private void CopyButton_OnClick(object sender, RoutedEventArgs e)
     {
-        if (GitTabControl.SelectedIndex == 0)
+        IReadOnlyDictionary<int, Action> tabActions = new Dictionary<int, Action>()
         {
-            if (KeywordComboBox.SelectedItem is not ComboBoxItem selectedValue) return;
+            { 0, CopyCommitMessage },
+            { 1, () => Clipboard.SetText($"{BranchNamePrefixTextBlock.Text}{BranchNameTextBox.Text}") }
+        };
 
-            Clipboard.SetText($"{selectedValue.Content}: {CommitMessageTextBox.Text}");
-            CommitMessageTextBox.Text = string.Empty;
-            FixTextComboBox.SelectedIndex = -1;
-        }
-        else
-        {
-            Clipboard.SetText($"{BranchNamePrefixTextBlock.Text}{BranchNameTextBox.Text}");
-        }
-
+        tabActions[GitTabControl.SelectedIndex]();
         MinimizeWindow();
+    }
+
+    private void CopyCommitMessage()
+    {
+        if (KeywordComboBox.SelectedItem is not ComboBoxItem selectedValue) return;
+
+        Clipboard.SetText($"{selectedValue.Content}: {CommitMessageTextBox.Text}");
+        ClearCommitMessage();
     }
 
     private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -145,26 +151,80 @@ public partial class MainWindow : Window
 
     private void PastButton_OnClick(object sender, RoutedEventArgs e)
     {
-        if (GitTabControl.SelectedIndex == 0)
+        string copyText = GitTabControl.SelectedIndex switch
         {
-            if (KeywordComboBox.SelectedItem is not ComboBoxItem selectedValue) return;
+            0 => GetCommitMessage(),
+            1 => GetBrunchName(),
+            _ => string.Empty
+        };
 
-            Clipboard.SetText($"{selectedValue.Content}: {Clipboard.GetText()}");
-            CommitMessageTextBox.Text = string.Empty;
-            FixTextComboBox.SelectedIndex = -1;
-            MinimizeWindow();
-            return;
-        }
+        if (string.IsNullOrEmpty(copyText)) return;
+        Clipboard.SetText(copyText);
 
+        UIElement targetElement = GitTabControl.SelectedIndex switch
+        {
+            0 => CommitMessageTextBox,
+            1 => BranchNameTextBox,
+            _ => this
+        };
+
+        // バルーンチップ表示
+        ShowBalloonTip("コピーしました", targetElement);
+
+    }
+
+    private string GetBrunchName()
+    {
         Match match = Regex.Match(Clipboard.GetText(), @"https?://[a-zA-Z0-9.-]+\.atlassian\.net/browse/([^/?#]+)");
-        if (!match.Success) return;
+        if (!match.Success) return string.Empty;
 
         BranchNameTextBox.Text = match.Groups[1].Value;
-        Clipboard.SetText($"{BranchNamePrefixTextBlock.Text}{BranchNameTextBox.Text}");
+        return $"{BranchNamePrefixTextBlock.Text}{BranchNameTextBox.Text}";
+    }
+
+    private string GetCommitMessage()
+    {
+        if (KeywordComboBox.SelectedItem is not ComboBoxItem selectedValue) return string.Empty;
+
+        CommitMessageTextBox.Text = Clipboard.GetText();
+        return $"{selectedValue.Content}: {Clipboard.GetText()}";
     }
 
     private void MainWindow_OnDeactivated(object? sender, EventArgs e)
     {
+        ClearCommitMessage();
         MinimizeWindow();
+    }
+
+    private void ClearCommitMessage()
+    {
+        CommitMessageTextBox.Text = string.Empty;
+        FixTextComboBox.SelectedIndex = -1;
+    }
+
+    private static void ShowBalloonTip(string message, UIElement target)
+    {
+        ToolTip toolTip = new()
+        {
+            Content = message,
+            Placement = PlacementMode.Bottom,
+            StaysOpen = false,
+            IsOpen = true,
+            PlacementTarget = target,
+            Background = Brushes.Yellow,
+            Foreground = Brushes.Black,
+            HorizontalOffset = -((FrameworkElement)target).ActualWidth + 100.0d
+        };
+
+        // 一定時間後に自動で閉じる
+        DispatcherTimer timer = new()
+            { Interval = TimeSpan.FromSeconds(2) };
+
+        timer.TickAsObservable().Take(1).Subscribe(_ =>
+        {
+            toolTip.IsOpen = false;
+            timer.Stop();
+        });
+        timer.Start();
     }
 }
