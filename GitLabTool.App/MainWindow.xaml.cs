@@ -112,6 +112,7 @@ public partial class MainWindow : Window
             case "Task":
                 FixTextComboBox.Items.Add(new ComboBoxItem() { Content = "クラスを修正しました。" });
                 FixTextComboBox.Items.Add(new ComboBoxItem() { Content = "クラスを追加しました。" });
+                FixTextComboBox.Items.Add(new ComboBoxItem() { Content = "マージ後のビルドエラーを解消しました。" });
                 break;
             case "LowRisk":
                 FixTextComboBox.Items.Add(new ComboBoxItem() { Content = "コメントを付与しました。" });
