@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <None Remove="Icons\Close_n.png" />
+    <None Remove="Icons\Gitlab.svg" />
     <None Remove="Icons\Minimize_n.png" />
     <None Remove="Icons\Restore_n.png" />
   </ItemGroup>
@@ -28,10 +29,12 @@
 
   <ItemGroup>
     <PackageReference Include="R3" Version="1.3.0" />
+    <PackageReference Include="SharpVectors.Wpf" Version="1.8.5" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Icons\Close_n.png" />
+    <Resource Include="Icons\Gitlab.svg" />
     <Resource Include="Icons\Minimize_n.png" />
     <Resource Include="Icons\Restore_n.png" />
   </ItemGroup>
