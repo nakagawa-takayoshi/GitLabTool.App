@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GitLabTool.App"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         mc:Ignorable="d"
         Title="GitLabTool" Height="230" Width="450"
         Topmost="True"
@@ -44,7 +45,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Border x:Name="IconBackgroundBorder" x:FieldModifier="private" Grid.Column="0" Background="DarkOliveGreen" Opacity="1" CornerRadius="4" Visibility="Hidden" />
-                <Image x:Name="AppIconImage" x:FieldModifier="private" Grid.Column="0" Source="pack://application:,,,/GitLabTool.App;component/Icons/Gitlab.png" Width="16" Height="16" Margin="6" />
+                <svgc:SvgViewbox Grid.Column="0" Source="pack://application:,,,/GitLabTool.App;component/Icons/Gitlab.svg" Width="16" Height="16" Margin="6" />
                 <TextBlock x:Name="TitleTextBlock" x:FieldModifier="private" Grid.Column="1" Text="GitLabTool" VerticalAlignment="Center" Margin="5,0"  />
                 <Button x:Name="MinimizeButton" x:FieldModifier="private" Grid.Column="2" Width="32" Height="32" Margin="2" 
                         WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource MinimizeButtonStyle}" 
